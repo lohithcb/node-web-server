@@ -1,20 +1,21 @@
 const express = require('express');
-const hbs= require('hbs');
+const hbs = require('hbs');
 const fs = require('fs');
-const port = process.env.PORT || 3000; //dynamically choosing port number for server | for local host
+const port = process.env.PORT || 3001; //dynamically choosing port number for server | for local host
+
 var app = express();
 
-hbs.registerPartials(__dirname+'/views/partials');
+hbs.registerPartials(__dirname + '/views/partials');
 app.set('view engine', 'hbs');
 
 //reg. to middlewares
-app.use( (req, res, next) => {
+app.use((req, res, next) => {
     var now = new Date().toString();
     var log = `${now}: ${req.method} ${req.url}`;
     console.log(log);
     fs.appendFileSync('server.log', log + "\n", (err) => {
-        if (err){
-            console.log('Unable to write log the report');
+        if (err) {
+            console.log('Unable to write log the report ' + err.getMessage());
         }
     });
     next(); //its like break or return to close middleware
@@ -41,6 +42,12 @@ hbs.registerHelper('screamIt', (text) => {
     return text.toUpperCase();
 });
 
+app.get('/projects', (req, res) => {
+    res.render('projects', {
+        pageTitle: 'Projects page',
+    });
+});
+
 app.get('/', (request, response) => {
     //response.send('<h1>Hello Express..!</h1>'); // Content-Type:text/html
     //response.send({ name: 'Lohith CB', age: 25}); // Content-Type:application/json
@@ -59,14 +66,8 @@ app.get('/about', (req, res) => {
     }); //rendering a page content, posting data to it
 });
 
-app.get('/projects', (req, res) => {
-    res.render('projects', {
-        pageTitle: 'Projects page',
-    });
-});
-
 app.get('/bad', (req, res) => {
-    res.send({error: true, message:'This is very bad request'});
+    res.send({error: true, message: 'This is very bad request'});
 });
 
 app.listen(port, () => {
