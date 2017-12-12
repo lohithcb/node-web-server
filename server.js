@@ -59,6 +59,12 @@ app.get('/about', (req, res) => {
     }); //rendering a page content, posting data to it
 });
 
+app.get('/projects', (req, res) => {
+    res.render('projects', {
+        pageTitle: 'Projects page',
+    });
+});
+
 app.get('/bad', (req, res) => {
     res.send({error: true, message:'This is very bad request'});
 });
