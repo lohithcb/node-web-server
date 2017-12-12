@@ -1,7 +1,7 @@
 const express = require('express');
 const hbs= require('hbs');
 const fs = require('fs');
-
+const port = process.env.PORT || 3000; //dynamically choosing port number for server | for local host
 var app = express();
 
 hbs.registerPartials(__dirname+'/views/partials');
@@ -63,6 +63,6 @@ app.get('/bad', (req, res) => {
     res.send({error: true, message:'This is very bad request'});
 });
 
-app.listen(3000, () => {
-    console.log('Server is up and running');
+app.listen(port, () => {
+    console.log(`Server is up and running at port ${port}`);
 });
